@@ -11,8 +11,8 @@
   "devDependencies": {
     "dotenv": "^4.0.0"
   },
-  "start": "node index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
