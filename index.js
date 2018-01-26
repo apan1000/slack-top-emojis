@@ -48,10 +48,10 @@ app.get('/emoji.json', function(req, res) {
 });
 
 // Respond to Slack subscribe challenge
-app.post('/slack/events', function(req, res) {
-  console.log(req.body);
-  res.end(req.body.challenge);
-});
+// app.post('/slack/events', function(req, res) {
+//   console.log(req.body);
+//   res.end(req.body.challenge);
+// });
 
 // Mount the event handler on a route
 // NOTE: you must mount to a path that matches the Request URL that was configured earlier
