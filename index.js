@@ -24,12 +24,11 @@ app.use(bodyParser.json());
 
 // Initialize firebase
 const admin = require("firebase-admin");
-const serviceAccount = require("./serviceAccountKey.json") || 
-  {
-    projectId: 'reaction-count',
-    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-    privateKey: process.env.FIREBASE_PRIVATE_KEY
-  };
+const serviceAccount = {
+  projectId: 'reaction-count',
+  clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+  privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n')
+};
 var reactions = [];
 
 admin.initializeApp({
