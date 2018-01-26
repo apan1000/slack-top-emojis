@@ -18,10 +18,15 @@ const slackWeb = new WebClient(process.env.SLACK_ACCESS_TOKEN); // xoxp- or simi
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
+app.set('json spaces');
+// You must use a body parser for JSON before mounting the adapter
+app.use(bodyParser.json());
 
 // Initialize firebase
 const admin = require("firebase-admin");
 const serviceAccount = require("./serviceAccountKey.json");
+
+var reactions = [];
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -34,8 +39,15 @@ const date = new Date().toISOString().substr(0, 10);
 const dateRef = firebase.ref(`/dates/${date}`);
 getTopEmojis(dateRef);
 
-// You must use a body parser for JSON before mounting the adapter
-app.use(bodyParser.json());
+// Return json of top reactions
+app.get('/emoji.json', function(req, res) {
+  res.send(reactions);
+});
+
+// Respond to Slack subscribe challenge
+app.post('/slack/events', function(req, res) {
+  res.end(req.body.challenge);
+});
 
 // Mount the event handler on a route
 // NOTE: you must mount to a path that matches the Request URL that was configured earlier
@@ -101,7 +113,8 @@ function getTopEmojis(ref) {
           topEmojis.push(emoji);
         });
 
-        console.log(topEmojis.slice().reverse());
+        reactions = topEmojis.slice().reverse();
+        console.log(reactions);
     }).catch(console.error);
   });
 }
